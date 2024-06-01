@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig/tsconfig.react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": [
+    "enableDevHmr.ts"
+  ],
+  "include": [
+    "./src"
+  ],
+}

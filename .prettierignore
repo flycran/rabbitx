@@ -1,0 +1,5 @@
+**/*.html
+**/*.js
+**/*.mjs
+**/package.json
+dist

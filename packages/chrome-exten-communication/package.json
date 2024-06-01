@@ -1,0 +1,58 @@
+{
+  "name": "chrome-exten-communication",
+  "version": "1.0.0",
+  "description": "用于chrome扩展的跨环境通信",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./Background": {
+      "import": "./dist/esm/Background.js",
+      "require": "./dist/cjs/Background.js",
+      "types": "./dist/types/Background.d.ts"
+    },
+    "./Content": {
+      "import": "./dist/esm/Content.js",
+      "require": "./dist/cjs/Content.js",
+      "types": "./dist/types/Content.d.ts"
+    },
+    "./Injected": {
+      "import": "./dist/esm/Injected.js",
+      "require": "./dist/cjs/Injected.js",
+      "types": "./dist/types/Injected.d.ts"
+    },
+    "./Popup": {
+      "import": "./dist/esm/Popup.js",
+      "require": "./dist/cjs/Popup.js",
+      "types": "./dist/types/Popup.d.ts"
+    },
+    "./Devtools": {
+      "import": "./dist/esm/Devtools.js",
+      "require": "./dist/cjs/Devtools.js",
+      "types": "./dist/types/Devtools.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/uuid": "^9.0.8",
+    "@types/webextension-polyfill": "^0.10.7"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1",
+    "webextension-polyfill": "^0.10.0"
+  }
+}

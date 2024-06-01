@@ -1,0 +1,25 @@
+{
+  "name": "rabbitx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "types": "dist/esm/index.d.ts",
+  "module": "dist/esm/index.js",
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "flycran",
+  "license": "MIT",
+  "dependencies": {
+    "chrome-exten-communication": "workspace:^",
+    "events": "^3.3.0",
+    "immer": "^10.1.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.8"
+  }
+}

@@ -22,8 +22,6 @@ export interface ResponseMap {
 
 const injectedMessage = new Injected<AcceptMap, ResponseMap>()
 
-window.injectedMessage = injectedMessage
-
 export interface HistoryType {
   action: string
   oldState: State

@@ -21,40 +21,42 @@ export type BuildAction<S, A extends Action<S>> = {
 
 type PromiseReturnType<T> = T extends Promise<infer U> ? U : never
 
-export type getStateType<R extends Rabbitx<any, any>> = R extends Rabbitx<infer S, any> ? S : never
+export type getStateType<R extends RabbitxAny> = R extends Rabbitx<infer S, any> ? S : never
 
-export type GetContextType<R extends Rabbitx<any, any>> = { state: getStateType<R> }
+export type GetContextType<R extends RabbitxAny> = { state: getStateType<R> }
 
-export interface RabbitxOptions<S extends object, A extends Action<S>> {
+export type RabbitxStates = Record<string, any>
+
+export interface RabbitxOptions {
   name: string
-  state: S | (() => S)
-  actions?: A | (() => A)
 }
+
+export type RabbitxAny = Rabbitx<any>
 
 export type State = Record<string, any>
 
 export interface RabbitxEventMap {
-  instantiation: Rabbitx<any, any>
+  instantiation: RabbitxAny
   useStore: {
-    instance: Rabbitx<any, any>
+    instance: RabbitxAny
   }
   getStore: {
-    instance: Rabbitx<any, any>
+    instance: RabbitxAny
     prop: string
   }
   emit: {
-    instance: Rabbitx<any, any>
+    instance: RabbitxAny
     type: keyof RabbitxEventMap
     payload: any
   }
   emitReceipt: Receipt<{
-    instance: Rabbitx<any, any>
+    instance: RabbitxAny
     type: keyof RabbitxEventMap
     payload: any
   }>
   dispacth: Receipt<
     {
-      instance: Rabbitx<any, any>
+      instance: RabbitxAny
       state: State
       action: string
       stack: string
@@ -81,25 +83,39 @@ type ReadonlyKeys<T> = {
 
 export type PickReadonly<T> = Pick<T, ReadonlyKeys<T>>
 
-export class Rabbitx<S extends State, A extends Action<S>> extends EventEmitter<RabbitxEventMap> {
+export type SeparateState<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any ? never : T[K]
+}
+
+export type SeparateActions<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any ? T[K] : never
+}
+
+export class Rabbitx<S> extends EventEmitter<RabbitxEventMap> {
   name: string
   historyDisplayIndex: number = -1
   readonly initialState: Readonly<PickWritable<S>>
   private state: Readonly<PickWritable<S>>
-  private getterState: PickReadonly<S>
-  private readonly actions: A
+  private readonly actions: SeparateActions<S>
   private _listeners: Set<() => void> = new Set()
 
-  constructor({ state, actions, name }: RabbitxOptions<S, A>) {
+  constructor(states: RabbitxStates | (() => RabbitxStates), options: RabbitxOptions) {
     super()
-    this.name = name
-    const state0 = typeof state === 'function' ? state() : state
-    const [state1, getter] = this.separateGetterState(state0)
-    this.state = state1
-    this.initialState = state1
-    this.getterState = getter
-    if (typeof actions === 'function') actions = actions()
-    this.actions = actions ?? ({} as A)
+    this.name = options.name
+    const state: any = {}
+    const actions: any = {}
+    const states0 = typeof states === 'function' ? states() : states
+    for (const key in states0) {
+      const s = states0[key]
+      if (typeof s === 'function') {
+        actions[key] = s
+      } else {
+        states0[key] === s
+      }
+    }
+    this.initialState = state
+    this.state = state
+    this.actions = actions
     this.emit('instantiation', this)
   }
 
@@ -249,4 +265,8 @@ export class Rabbitx<S extends State, A extends Action<S>> extends EventEmitter<
     finish()
     return result as ReturnType<A[keyof A]>
   }
+}
+
+const defineState = <S>(state: S) => {
+  return state
 }
